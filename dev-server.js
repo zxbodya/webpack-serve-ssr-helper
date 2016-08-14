@@ -43,7 +43,12 @@ const host = process.env.HOST || 'localhost';
 const devPort = process.env.DEV_SERVER_PORT || 2992;
 const appPort = process.env.PORT || 8080;
 
-const devServerConfig = require('./webpack-dev-server.config.js');
+const hot = process.argv.indexOf('--hot') !== -1;
+
+const devServerConfig = hot
+  ? require('./webpack-hot-dev-server.config.js')
+  : require('./webpack-dev-server.config.js');
+
 const backendConfig = require('./webpack-watch-server.config.js');
 
 const devClient = [
@@ -51,6 +56,10 @@ const devClient = [
     'webpack-dev-server/client/'
   )}?${protocol}://${host}:${devPort}`,
 ];
+
+if (hot) {
+  devClient.push(require.resolve('webpack/hot/only-dev-server'));
+}
 
 if (
   typeof devServerConfig.entry === 'object' &&
@@ -77,6 +86,7 @@ frontEndCompiler.plugin('done', stats =>
 
 const devServer = new WebpackDevServer(frontEndCompiler, {
   // --progress
+  hot,
   compress: false,
   watchOptions: {
     aggregateTimeout: 300,
@@ -117,7 +127,7 @@ function startServer() {
     watch: [],
     ext: 'noop',
     stdin: false,
-    stdout: false,
+    stdout: true,
   }).on('start', () => {
     nodemonStart$.onNext('start');
   });
