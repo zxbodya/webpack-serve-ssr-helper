@@ -83,13 +83,22 @@ module.exports = function startDevServer({
   }
 
   combineLatest(
-    frontStatus$.pipe(filter(({ status }) => status === 'done'), first()),
-    backendStatus$.pipe(filter(({ status }) => status === 'done'), first()),
+    frontStatus$.pipe(
+      filter(({ status }) => status === 'done'),
+      first()
+    ),
+    backendStatus$.pipe(
+      filter(({ status }) => status === 'done'),
+      first()
+    ),
     startServer
   ).subscribe(() => {
     console.log('Starting server');
     nodemonStart$
-      .pipe(first(), mergeMap(() => waitForPort(appPort, appHost)))
+      .pipe(
+        first(),
+        mergeMap(() => waitForPort(appPort, appHost))
+      )
       .subscribe(() => {
         console.log('Server is ready');
       });
@@ -118,22 +127,30 @@ module.exports = function startDevServer({
     )
     .subscribe(isReady$);
 
-  serve({
-    ...serveOptions,
-    compiler: frontEndCompiler,
-    add: (app, middleware) => {
-      const p = convert(proxy('/', { target: appUrl }));
-      // since we're manipulating the order of middleware added, we need to handle
-      // adding these two internal middleware functions.
-      middleware.webpack();
-      middleware.content();
+  serve(
+    {},
+    {
+      ...serveOptions,
+      compiler: frontEndCompiler,
+      add: (app, middleware) => {
+        const p = convert(proxy('/', { target: appUrl }));
+        // since we're manipulating the order of middleware added, we need to handle
+        // adding these two internal middleware functions.
+        middleware.content();
+        middleware.webpack();
 
-      app.use(async (ctx, next) => {
-        await isReady$.pipe(filter(v => v), first()).toPromise();
-        return p(ctx, next);
-      });
-    },
-  });
+        app.use(async (ctx, next) => {
+          await isReady$
+            .pipe(
+              filter(v => v),
+              first()
+            )
+            .toPromise();
+          return p(ctx, next);
+        });
+      },
+    }
+  );
 
   // workaround for nodemon
   process.once('SIGINT', () => {

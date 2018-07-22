@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 require('dotenv').config({ silent: true });
 const path = require('path');
-const startDevServer = require('webpack-serve-nodemon-helper');
+const startDevServer = require('webpack-serve-ssr-helper');
 
 const devHost = process.env.DEV_SERVER_HOST || 'localhost';
 const devPort = process.env.DEV_SERVER_PORT || 8080;
@@ -51,7 +51,7 @@ startDevServer({
   },
   // webpack-serve
   serveOptions: {
-    dev: {
+    devMiddleware: {
       hot: isHot,
       compress: false,
       watchOptions: {
@@ -64,7 +64,7 @@ startDevServer({
     port: devPort,
     host: devHost,
     clipboard: false,
-    hot: {
+    hotClient: {
       hot: isHot,
       port: devWsPort,
     },

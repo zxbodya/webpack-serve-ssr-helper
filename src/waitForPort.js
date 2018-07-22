@@ -8,12 +8,16 @@ exports.waitForPort = function waitForPort(port, address) {
 
     function connect() {
       s = new net.Socket();
-      s.connect(port, address, () => {
-        s.destroy();
+      s.connect(
+        port,
+        address,
+        () => {
+          s.destroy();
 
-        observer.next('ok');
-        observer.complete();
-      });
+          observer.next('ok');
+          observer.complete();
+        }
+      );
       s.on('error', () => {
         s.destroy();
         setTimeout(connect, 100);

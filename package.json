@@ -1,6 +1,6 @@
 {
   "name": "webpack-serve-ssr-helper",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Helper utility to use webpack-serve and nodemon for apps with server side rendering",
   "main": "src/dev-server.js",
   "author": "Bogdan Savluk <savluk.bogdan@gmail.com>",
@@ -31,11 +31,11 @@
     "nodemon": "^1.17.4",
     "rxjs": "^6.1.0",
     "webpack": "^4.8.2",
-    "webpack-serve": "^0.3.2"
+    "webpack-serve": "^2.0.2"
   },
   "devDependencies": {
     "eslint": "^4.19.1",
-    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-config-airbnb-base": "^13.0.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.11.0",
     "eslint-plugin-prettier": "^2.6.0",
