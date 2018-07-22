@@ -132,12 +132,13 @@ module.exports = function startDevServer({
     {
       ...serveOptions,
       compiler: frontEndCompiler,
-      add: (app, middleware) => {
+      add: async (app, middleware) => {
         const p = convert(proxy('/', { target: appUrl }));
         // since we're manipulating the order of middleware added, we need to handle
         // adding these two internal middleware functions.
-        middleware.content();
-        middleware.webpack();
+
+        await middleware.webpack();
+        await middleware.content();
 
         app.use(async (ctx, next) => {
           await isReady$

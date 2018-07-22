@@ -1,6 +1,6 @@
 {
   "name": "webpack-serve-ssr-helper",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Helper utility to use webpack-serve and nodemon for apps with server side rendering",
   "main": "src/dev-server.js",
   "author": "Bogdan Savluk <savluk.bogdan@gmail.com>",
